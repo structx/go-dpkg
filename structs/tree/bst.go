@@ -1,3 +1,4 @@
+// Package tree binary search tree
 package tree
 
 // Node tree node

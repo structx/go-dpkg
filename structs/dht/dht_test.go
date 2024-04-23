@@ -27,10 +27,9 @@ func (suite *DHTSuite) TestPut() {
 
 	assert := assert.New(suite.T())
 
-	data := "some data"
 	key := []byte("my-key")
 
-	n, err := suite.dht.Put(key, []byte(data))
+	n, err := suite.dht.Put(key)
 	assert.NoError(err)
 
 	fmt.Printf("found node %s", hex.EncodeToString(n.ID[:]))
@@ -38,9 +37,11 @@ func (suite *DHTSuite) TestPut() {
 
 func (suite *DHTSuite) TestAddNode() {
 
+	assert := assert.New(suite.T())
+
 	n := dht.NewNode("127.0.0.2:1234")
 
-	suite.dht.AddNode(n)
+	assert.NoError(suite.dht.AddNode(n))
 }
 
 func TestDHTSuite(t *testing.T) {
