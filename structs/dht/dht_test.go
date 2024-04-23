@@ -1,4 +1,4 @@
-package structs_test
+package dht_test
 
 import (
 	"encoding/hex"
@@ -7,20 +7,18 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/trevatk/go-pkg/structs"
+
+	"github.com/trevatk/go-pkg/structs/dht"
 )
 
 type DHTSuite struct {
 	suite.Suite
-	dht *structs.DHT
+	dht *dht.DHT
 }
 
 func (suite *DHTSuite) SetupTest() {
 
-	assert := assert.New(suite.T())
-
-	dht, err := structs.NewDHT("127.0.0.1:1234")
-	assert.NoError(err)
+	dht := dht.NewDHT("127.0.0.1:1234")
 
 	suite.dht = dht
 }
@@ -36,6 +34,13 @@ func (suite *DHTSuite) TestPut() {
 	assert.NoError(err)
 
 	fmt.Printf("found node %s", hex.EncodeToString(n.ID[:]))
+}
+
+func (suite *DHTSuite) TestAddNode() {
+
+	n := dht.NewNode("127.0.0.2:1234")
+
+	suite.dht.AddNode(n)
 }
 
 func TestDHTSuite(t *testing.T) {
