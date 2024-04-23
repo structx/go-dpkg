@@ -1,16 +1,19 @@
 // Package controller exposed http controllers
 package controller
 
-import (
-	"github.com/labstack/echo/v4"
-)
+import "net/http"
 
-// Controller exposed http controller on service handlers
-type Controller interface {
-	RegisterRoutesV1(g *echo.Group)
+// V0 exposed http controller on root handlers
+type V0 interface {
+	RegisterRoutesV0() http.Handler
 }
 
-// RootController exposed http controller on root handler
+// V1 exposed http controller on service handlers
+type V1 interface {
+	RegisterRoutesV1() http.Handler
+}
+
+// V1P exposed http controller for protected handlers
 type RootController interface {
-	RegisterRoutesV0(g *echo.Echo)
+	RegisterRoutesV1P() http.Handler
 }
