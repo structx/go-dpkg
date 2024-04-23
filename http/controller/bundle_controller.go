@@ -33,7 +33,7 @@ func (b *Bundle) RegisterRoutesV0() http.Handler {
 }
 
 // Health check handler
-func (b *Bundle) Health(w http.ResponseWriter, r *http.Request) {
+func (b *Bundle) Health(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	_, err := w.Write([]byte("OK"))
 	if err != nil {

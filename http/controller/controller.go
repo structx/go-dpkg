@@ -14,6 +14,6 @@ type V1 interface {
 }
 
 // V1P exposed http controller for protected handlers
-type RootController interface {
+type V1P interface {
 	RegisterRoutesV1P() http.Handler
 }
