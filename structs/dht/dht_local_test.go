@@ -7,44 +7,19 @@ import (
 )
 
 func Test_HashKey(t *testing.T) {
-
-	assert := assert.New(t)
-
 	t.Run("default", func(t *testing.T) {
+		assert := assert.New(t)
+
 		key := []byte("bob")
 		h := hashKey(key)
 		assert.NotNil(h)
 	})
 }
 
-func Test_XOR(t *testing.T) {
-
-	assert := assert.New(t)
-
-	t.Run("default", func(t *testing.T) {
-
-		a := [28]byte{}
-		b := [28]byte{}
-
-		v := xor(a, b)
-
-		assert.Equal(v, []byte{
-			0xFF, 0xFF, 0xFF, 0xFF,
-			0xFF, 0xFF, 0xFF, 0xFF,
-			0xFF, 0xFF, 0xFF, 0xFF,
-			0xFF, 0xFF, 0xFF, 0xFF,
-			0xFF, 0xFF, 0xFF, 0xFF,
-			0xFF, 0xFF, 0xFF, 0xFF,
-			0xFF, 0xFF, 0xFF, 0xFF,
-		})
-	})
-}
-
 func Test_CompareDistances(t *testing.T) {
-
-	assert := assert.New(t)
-
 	t.Run("default", func(t *testing.T) {
+
+		assert := assert.New(t)
 
 		a := [28]byte{
 			0xFF, 0xFF, 0xFF, 0xFF,

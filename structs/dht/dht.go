@@ -1,3 +1,4 @@
+// Package dht distributed hash table
 package dht
 
 import (
@@ -48,7 +49,7 @@ func NewDHT(address string) *DHT {
 }
 
 // Put returns which node to pass data too
-func (d *DHT) Put(key, data []byte) (*Node, error) {
+func (d *DHT) Put(key []byte) (*Node, error) {
 
 	keyHash := hashKey(key)
 
@@ -95,7 +96,7 @@ func (d *DHT) findClosestNodes(keyHash [28]byte, increment int) [][28]byte {
 
 	// start with current DHT
 	currentNode := d.id
-	fmt.Println(currentNode)
+
 	for i := 0; i < k+increment; i++ {
 
 		var (
