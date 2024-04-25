@@ -8,13 +8,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+
 	"github.com/trevatk/go-pkg/adapter/logging"
 	"github.com/trevatk/go-pkg/adapter/port/http/controller"
+	"github.com/trevatk/go-pkg/adapter/setup"
+	"github.com/trevatk/go-pkg/util/decode"
 )
 
 func init() {
-	_ = os.Setenv("LOG_LEVEL", "DEBUG")
-	_ = os.Setenv("LOG_PATH", "pkg.log")
+	_ = os.Setenv("DSERVICE_CONFIG", "./testfiles/controller.test.hcl")
 }
 
 type BundleControllerSuite struct {
@@ -26,7 +28,12 @@ func (suite *BundleControllerSuite) SetupTest() {
 
 	assert := assert.New(suite.T())
 
-	logger, err := logging.NewLoggerFromEnv()
+	_ = os.Mkdir("./testfiles/log", os.ModePerm)
+
+	cfg := setup.New()
+	assert.NoError(decode.ConfigFromEnv(cfg))
+
+	logger, err := logging.New(cfg)
 	assert.NoError(err)
 
 	suite.bc = controller.NewBundle(logger)

@@ -3,43 +3,49 @@ package kv
 
 import (
 	"fmt"
+	"path/filepath"
 
 	"github.com/cockroachdb/pebble"
-	pdb "github.com/cockroachdb/pebble"
+	"github.com/trevatk/go-pkg/adapter/setup"
+	"github.com/trevatk/go-pkg/domain"
+	"go.uber.org/zap"
 )
 
 // Pebble db wrapper class
-type Pebble struct {
-	db *pdb.DB
+type PebbleDB struct {
+	db *pebble.DB
 }
 
 // interface compliance
-var _ KV = (*Pebble)(nil)
+var _ domain.KV = (*PebbleDB)(nil)
 
 // NewPebble return new pebble db wrapper class
-func NewPebble(dir string) (*Pebble, error) {
+func NewPebble(logger *zap.Logger, cfg *setup.Config) (*PebbleDB, error) {
 
-	opts := &pdb.Options{}
-	db, err := pdb.Open(dir, opts)
+	ccfg := cfg.GetChain()
+	suggaredLogger := logger.Named("PebbleRepository").Sugar()
+
+	opts := &pebble.Options{Logger: suggaredLogger}
+	db, err := pebble.Open(filepath.Clean(ccfg.BaseDir), opts)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open pebble db: %v", err)
 	}
 
-	return &Pebble{
+	return &PebbleDB{
 		db: db,
 	}, nil
 }
 
 // Put set key/value pair
-func (p *Pebble) Put(key, value []byte) error {
+func (p *PebbleDB) Put(key, value []byte) error {
 	return p.db.Set(key, value, pebble.Sync)
 }
 
 // Get value by key
-func (p *Pebble) Get(key []byte) ([]byte, error) {
+func (p *PebbleDB) Get(key []byte) ([]byte, error) {
 
 	v, closer, err := p.db.Get(key)
-	if err != nil && err == pdb.ErrNotFound {
+	if err != nil && err == pebble.ErrNotFound {
 		return []byte{}, &ErrNotFound{Key: key}
 	} else if err != nil {
 		return []byte{}, fmt.Errorf("failed to get key value %v", err)
@@ -54,6 +60,6 @@ func (p *Pebble) Get(key []byte) ([]byte, error) {
 }
 
 // Close database connection
-func (p *Pebble) Close() error {
+func (p *PebbleDB) Close() error {
 	return p.db.Close()
 }
