@@ -1,3 +1,4 @@
+// Package domain application layer models and interfaces
 package domain
 
 import (
