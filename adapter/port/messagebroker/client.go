@@ -1,3 +1,4 @@
+// Package messagebroker implementation
 package messagebroker
 
 import (
@@ -11,7 +12,7 @@ import (
 	pbv1 "github.com/trevatk/go-pkg/proto/messaging/v1"
 )
 
-// Client
+// Client message broker implementation
 type Client struct {
 	conn *grpc.ClientConn
 }
@@ -19,7 +20,7 @@ type Client struct {
 // interface compliance
 var _ domain.MessageBroker = (*Client)(nil)
 
-// Publish
+// Publish message to topic
 func (c *Client) Publish(ctx context.Context, topic string, msg []byte) error {
 	c.conn.Connect()
 
@@ -39,7 +40,7 @@ func (c *Client) Publish(ctx context.Context, topic string, msg []byte) error {
 	return nil
 }
 
-// Subscribe
+// Subscribe to topic
 func (c *Client) Subscribe(ctx context.Context, topic string) (<-chan domain.Envelope, error) {
 	c.conn.Connect()
 
@@ -98,7 +99,7 @@ func (c *Client) Subscribe(ctx context.Context, topic string) (<-chan domain.Env
 	}
 }
 
-// Close
+// Close message broker connections
 func (c *Client) Close() error {
 	return c.conn.Close()
 }
