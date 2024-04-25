@@ -5,6 +5,8 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"go.uber.org/zap"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // Bundle controller
@@ -28,6 +30,7 @@ func (b *Bundle) RegisterRoutesV0() http.Handler {
 	r := chi.NewRouter()
 
 	r.Get("/health", b.Health)
+	r.Handle("/metrics", promhttp.Handler())
 
 	return r
 }

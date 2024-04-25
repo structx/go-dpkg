@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 
 	"github.com/trevatk/go-pkg/domain"
 	pbv1 "github.com/trevatk/go-pkg/proto/messaging/v1"
@@ -19,6 +20,20 @@ type Client struct {
 
 // interface compliance
 var _ domain.MessageBroker = (*Client)(nil)
+
+// New constructor
+func New(cfg domain.Config) (*Client, error) {
+
+	mcfg := cfg.GetMessenger()
+	conn, err := grpc.Dial(mcfg.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, fmt.Errorf("failed to dial message broker %v", err)
+	}
+
+	return &Client{
+		conn: conn,
+	}, nil
+}
 
 // Publish message to topic
 func (c *Client) Publish(ctx context.Context, topic string, msg []byte) error {

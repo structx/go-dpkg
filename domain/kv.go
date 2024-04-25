@@ -1,4 +1,4 @@
-package kv
+package domain
 
 // KV key value database interface
 type KV interface {

@@ -1,1 +1,4 @@
 vendor/
+**/testfiles/log
+**/testfiles/raft
+**/testfiles/data

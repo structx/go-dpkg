@@ -2,31 +2,25 @@
 package logging
 
 import (
-	"errors"
-	"os"
 	"path/filepath"
 	"strings"
 
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+
+	"github.com/trevatk/go-pkg/domain"
 )
 
-// NewLoggerFromEnv return uber/zap logger from environment
-func NewLoggerFromEnv() (*zap.Logger, error) {
+// New uber/zap constructor
+func New(cfg domain.Config) (*zap.Logger, error) {
 
-	logFile := os.Getenv("LOG_PATH")
-	if logFile == "" {
-		return nil, errors.New("$LOG_PATH must be set")
-	}
+	lcfg := cfg.GetLogger()
 
-	level := strings.ToLower(os.Getenv("LOG_LEVEL"))
-	if level == "" {
-		return nil, errors.New("$LOG_LEVEL must be set")
-	}
+	level := strings.ToLower(lcfg.Level)
 
-	cfg := zap.NewProductionConfig()
-	cfg.OutputPaths = []string{
-		filepath.Clean(logFile),
+	zcfg := zap.NewProductionConfig()
+	zcfg.OutputPaths = []string{
+		filepath.Clean(lcfg.Path),
 	}
 
 	var l zapcore.Level
@@ -37,7 +31,7 @@ func NewLoggerFromEnv() (*zap.Logger, error) {
 		l = zap.ErrorLevel
 	}
 
-	cfg.Level = zap.NewAtomicLevelAt(l)
+	zcfg.Level = zap.NewAtomicLevelAt(l)
 
-	return cfg.Build()
+	return zcfg.Build()
 }
