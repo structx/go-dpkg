@@ -15,7 +15,7 @@ raft {
 }
 
 logger {
-    log_path = "./testfiles/log"
+    log_path = "./testfiles/log/raftfx.log"
     log_level = "DEBUG"
     raft_log_path = "./testfiles/log"
 }
