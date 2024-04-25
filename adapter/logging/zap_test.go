@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/trevatk/go-pkg/logging"
+	"github.com/trevatk/go-pkg/adapter/logging"
 )
 
 func init() {

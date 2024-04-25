@@ -8,8 +8,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/trevatk/go-pkg/http/controller"
-	"github.com/trevatk/go-pkg/logging"
+	"github.com/trevatk/go-pkg/adapter/logging"
+	"github.com/trevatk/go-pkg/adapter/port/http/controller"
 )
 
 func init() {
