@@ -11,7 +11,8 @@ import (
 	"go.uber.org/zap"
 )
 
-// Pebble db wrapper class
+// PebbleDB kv database implementation
+// serves as wrapper around cockroad pebble db
 type PebbleDB struct {
 	db *pebble.DB
 }
