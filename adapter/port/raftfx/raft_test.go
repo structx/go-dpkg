@@ -11,11 +11,15 @@ import (
 )
 
 func init() {
-	_ = os.Setenv("DSERVICE_CONFIG", "./testfiles/raft_config.hcl")
+	_ = os.Setenv("DSERVICE_CONFIG", "./testfiles/raft.test.hcl")
 }
 
-func Test_Provider(t *testing.T) {
-	t.Run("new", func(t *testing.T) {
+func Test_New(t *testing.T) {
+	t.Run("provider", func(t *testing.T) {
+
+		_ = os.Mkdir("./testfiles/log", os.ModePerm)
+		_ = os.Mkdir("./testfiles/raft", os.ModePerm)
+
 		assert := assert.New(t)
 
 		cfg := setup.New()
