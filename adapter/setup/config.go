@@ -20,9 +20,11 @@ var _ domain.Config = (*Config)(nil)
 // New config constructor
 func New() *Config {
 	return &Config{
-		Logger: domain.Logger{},
-		Server: domain.Server{},
-		Raft:   domain.Raft{},
+		Logger:        domain.Logger{},
+		Server:        domain.Server{},
+		Raft:          domain.Raft{},
+		Chain:         domain.Chain{},
+		MessageBroker: domain.Messenger{},
 	}
 }
 
