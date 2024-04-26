@@ -6,9 +6,10 @@ import (
 	"path/filepath"
 
 	"github.com/cockroachdb/pebble"
-	"github.com/trevatk/go-pkg/adapter/setup"
-	"github.com/trevatk/go-pkg/domain"
+
 	"go.uber.org/zap"
+
+	"github.com/trevatk/go-pkg/domain"
 )
 
 // PebbleDB kv database implementation
@@ -21,7 +22,7 @@ type PebbleDB struct {
 var _ domain.KV = (*PebbleDB)(nil)
 
 // NewPebble return new pebble db wrapper class
-func NewPebble(logger *zap.Logger, cfg *setup.Config) (*PebbleDB, error) {
+func NewPebble(logger *zap.Logger, cfg domain.Config) (*PebbleDB, error) {
 
 	ccfg := cfg.GetChain()
 	suggaredLogger := logger.Named("PebbleRepository").Sugar()
