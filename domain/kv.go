@@ -9,3 +9,13 @@ type KV interface {
 	// Close database connection
 	Close() error
 }
+
+// KvIterator key value database interface
+type KvIterator interface {
+	// Next if next keyvalue pair is not null
+	Next() bool
+	// Key getter key from current index
+	Key() []byte
+	// Close iterator
+	Close() error
+}
