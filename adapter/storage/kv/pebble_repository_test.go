@@ -86,6 +86,8 @@ func (suite *PebbleDBSuite) TestIterator() {
 	for it.Next() {
 		assert.NotEmpty(it.Key())
 	}
+
+	suite.TeardownTest()
 }
 
 func (suite *PebbleDBSuite) TeardownTest() {
