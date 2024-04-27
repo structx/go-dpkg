@@ -17,7 +17,7 @@ type PebbleIterator struct {
 var _ domain.KvIterator = (*PebbleIterator)(nil)
 
 // Iterator iterator constructor
-func (p *PebbleDB) Iterator(ctx context.Context) (*PebbleIterator, error) {
+func (p *PebbleDB) Iterator(ctx context.Context) (domain.KvIterator, error) {
 
 	opts := &pebble.IterOptions{}
 	it, err := p.db.NewIterWithContext(ctx, opts)

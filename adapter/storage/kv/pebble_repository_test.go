@@ -1,6 +1,7 @@
 package kv_test
 
 import (
+	"context"
 	"os"
 	"testing"
 
@@ -69,6 +70,22 @@ func (suite *PebbleDBSuite) TestGet() {
 	assert.Equal(value, v)
 
 	suite.TeardownTest()
+}
+
+func (suite *PebbleDBSuite) TestIterator() {
+
+	assert := suite.Assert()
+
+	_ = suite.db.Put([]byte("1"), []byte("1"))
+	_ = suite.db.Put([]byte("2"), []byte("2"))
+	_ = suite.db.Put([]byte("3"), []byte("3"))
+
+	it, err := suite.db.Iterator(context.TODO())
+	assert.NoError(err)
+
+	for it.Next() {
+		assert.NotEmpty(it.Key())
+	}
 }
 
 func (suite *PebbleDBSuite) TeardownTest() {

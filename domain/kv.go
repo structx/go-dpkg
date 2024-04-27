@@ -1,11 +1,15 @@
 package domain
 
+import "context"
+
 // KV key value database interface
 type KV interface {
 	// Get value by key
 	Get(key []byte) ([]byte, error)
 	// Put set key/value pair
 	Put(key, value []byte) error
+	// Iterator key/value iterator
+	Iterator(ctx context.Context) (KvIterator, error)
 	// Close database connection
 	Close() error
 }
