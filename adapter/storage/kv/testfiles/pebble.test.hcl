@@ -27,3 +27,7 @@ chain {
 message_broker {
     server_addr = "127.0.0.1:8333"
 }
+
+acl {
+    server_addr = "127.0.0.1:8444"
+}
