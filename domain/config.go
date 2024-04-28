@@ -37,11 +37,23 @@ type Messenger struct {
 	ServerAddr string `hcl:"server_addr"`
 }
 
+// AccessControl configuration
+type AccessControl struct {
+	ServerAddr string `hcl:"server_addr"`
+}
+
 // Config service configuration interface
 type Config interface {
+	// GetServer getter server configuration
 	GetServer() Server
+	// GetRaft getter raft configuration
 	GetRaft() Raft
+	// GetLogger getter logger configuration
 	GetLogger() Logger
+	// GetChain getter chain configuration
 	GetChain() Chain
+	// GetMessenger getter messenger configuration
 	GetMessenger() Messenger
+	// GetAccessControl getter access control configuration
+	GetAccessControl() AccessControl
 }
