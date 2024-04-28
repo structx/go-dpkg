@@ -29,12 +29,16 @@ func (t Topic) String() string {
 	}
 }
 
-// MessageBroker interface
+// MessageBroker client interface
+//
+//go:generate mockery --name MessageBroker
 type MessageBroker interface {
 	// Publish message to topic
 	Publish(context.Context, string, []byte) error
 	// Subscribe to topic
 	Subscribe(context.Context, string) (<-chan Envelope, error)
+	// RequestResponse send message and wait for response
+	RequestResponse(context.Context, Envelope) (Envelope, error)
 	// Close message broker connection
 	Close() error
 }

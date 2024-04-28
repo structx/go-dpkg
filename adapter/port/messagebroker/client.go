@@ -114,6 +114,27 @@ func (c *Client) Subscribe(ctx context.Context, topic string) (<-chan domain.Env
 	}
 }
 
+// RequestResponse send request and wait for response
+func (c *Client) RequestResponse(ctx context.Context, in domain.Envelope) (domain.Envelope, error) {
+
+	c.conn.Connect()
+
+	cli := pbv1.NewMessagingServiceV1Client(c.conn)
+
+	timeout, cancel := context.WithTimeout(ctx, time.Millisecond*200)
+	defer cancel()
+
+	rr, err := cli.RequestResponse(timeout, &pbv1.Envelope{
+		Topic:   in.GetTopic(),
+		Payload: in.GetPayload(),
+	})
+	if err != nil {
+		return nil, fmt.Errorf("response/response message failed %v", err)
+	}
+
+	return domain.NewMsg(rr.GetTopic(), rr.GetPayload()), nil
+}
+
 // Close message broker connections
 func (c *Client) Close() error {
 	return c.conn.Close()

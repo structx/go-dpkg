@@ -3,6 +3,8 @@ package domain
 import "context"
 
 // KV key value database interface
+//
+//go:generate mockery --name KV
 type KV interface {
 	// Get value by key
 	Get(key []byte) ([]byte, error)
