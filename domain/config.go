@@ -22,8 +22,9 @@ type Ports struct {
 
 // Server configuration
 type Server struct {
-	BindAddr string `hcl:"bind_addr"`
-	Ports    Ports  `hcl:"ports,block"`
+	BindAddr       string `hcl:"bind_addr"`
+	Ports          Ports  `hcl:"ports,block"`
+	DefaultTimeout int64  `hcl:"default_timeout"`
 }
 
 // Chain configuration
