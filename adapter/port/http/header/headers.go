@@ -1,8 +1,9 @@
+// Package header middleware/inceptor values
 package header
 
 const (
-	// DecentralizedWallet
+	// DecentralizedWallet decentralized wallet
 	DecentralizedWallet string = "Decentralized Wallet"
-	// DecentralizedIdentity
+	// DecentralizedIdentity decentralized identity
 	DecentralizedIdentity string = "Decentralized Identity"
 )

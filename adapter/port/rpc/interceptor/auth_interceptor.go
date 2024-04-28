@@ -47,7 +47,7 @@ func NewAuth(logger *zap.Logger, broker domain.MessageBroker) *Auth {
 }
 
 // UnaryInterceptor single request interceptor to verify wallet access permissions
-func (a *Auth) UnaryInterceptor(ctx context.Context, req any, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
+func (a *Auth) UnaryInterceptor(ctx context.Context, req any, _ *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (any, error) {
 
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
