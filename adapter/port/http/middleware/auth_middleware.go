@@ -7,7 +7,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/trevatk/go-pkg/domain"
+	"github.com/structx/go-pkg/domain"
 )
 
 // Auth middleware implementation

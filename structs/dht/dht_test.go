@@ -8,7 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/trevatk/go-pkg/structs/dht"
+	"github.com/structx/go-pkg/structs/dht"
 )
 
 type DHTSuite struct {

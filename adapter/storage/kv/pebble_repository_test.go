@@ -7,11 +7,11 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/trevatk/go-pkg/adapter/logging"
-	"github.com/trevatk/go-pkg/adapter/setup"
-	"github.com/trevatk/go-pkg/adapter/storage/kv"
-	"github.com/trevatk/go-pkg/domain"
-	"github.com/trevatk/go-pkg/util/decode"
+	"github.com/structx/go-pkg/adapter/logging"
+	"github.com/structx/go-pkg/adapter/setup"
+	"github.com/structx/go-pkg/adapter/storage/kv"
+	"github.com/structx/go-pkg/domain"
+	"github.com/structx/go-pkg/util/decode"
 )
 
 func init() {

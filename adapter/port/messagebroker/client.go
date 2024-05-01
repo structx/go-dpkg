@@ -9,8 +9,8 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 
-	"github.com/trevatk/go-pkg/domain"
-	pbv1 "github.com/trevatk/go-pkg/proto/messaging/v1"
+	"github.com/structx/go-pkg/domain"
+	pbv1 "github.com/structx/go-pkg/proto/messaging/v1"
 )
 
 // Client message broker implementation

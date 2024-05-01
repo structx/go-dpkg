@@ -5,9 +5,9 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/trevatk/go-pkg/adapter/port/http/serverfx"
-	"github.com/trevatk/go-pkg/adapter/setup"
-	"github.com/trevatk/go-pkg/util/decode"
+	"github.com/structx/go-pkg/adapter/port/http/serverfx"
+	"github.com/structx/go-pkg/adapter/setup"
+	"github.com/structx/go-pkg/util/decode"
 )
 
 func init() {

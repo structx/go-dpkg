@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	"github.com/trevatk/go-pkg/structs/tree"
+	"github.com/structx/go-pkg/structs/tree"
 )
 
 type BSTSuite struct {

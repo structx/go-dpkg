@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 
-	"github.com/trevatk/go-pkg/domain"
+	"github.com/structx/go-pkg/domain"
 )
 
 // New uber/zap constructor

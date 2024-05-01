@@ -5,8 +5,8 @@ import (
 	"context"
 	"encoding/json"
 
-	"github.com/trevatk/go-pkg/adapter/port/http/header"
-	"github.com/trevatk/go-pkg/domain"
+	"github.com/structx/go-pkg/adapter/port/http/header"
+	"github.com/structx/go-pkg/domain"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

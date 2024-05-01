@@ -2,7 +2,7 @@
 package setup
 
 import (
-	"github.com/trevatk/go-pkg/domain"
+	"github.com/structx/go-pkg/domain"
 )
 
 // Config service config implmentation

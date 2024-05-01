@@ -1,4 +1,4 @@
-module github.com/trevatk/go-pkg
+module github.com/structx/go-pkg
 
 go 1.22.0
 
