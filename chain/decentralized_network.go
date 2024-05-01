@@ -1,3 +1,4 @@
+// Package chain defined service interfaces
 package chain
 
 // interfaces in this package are used to define
