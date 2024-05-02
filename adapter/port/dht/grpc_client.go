@@ -1,3 +1,4 @@
+// Package dht gRPC implementation
 package dht
 
 import (
@@ -13,12 +14,12 @@ import (
 	pbv1 "github.com/structx/go-pkg/proto/dht/v1"
 )
 
-// Client
+// Client implementation
 type Client struct {
 	conn *grpc.ClientConn
 }
 
-// NewClient
+// NewClient constructor
 func NewClient(address string) (*Client, error) {
 
 	conn, err := grpc.Dial(address, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -31,7 +32,7 @@ func NewClient(address string) (*Client, error) {
 	}, nil
 }
 
-// FindNode
+// FindNode gRPC client call
 func (c *Client) FindNode(ctx context.Context, nodeID, sender domain.NodeID) ([]*domain.Contact, error) {
 	c.conn.Connect()
 
@@ -62,7 +63,7 @@ func (c *Client) FindNode(ctx context.Context, nodeID, sender domain.NodeID) ([]
 	return contactSlice, nil
 }
 
-// Close
+// Close client connection
 func (c *Client) Close() error {
 	return c.conn.Close()
 }

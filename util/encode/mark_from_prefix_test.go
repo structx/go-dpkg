@@ -13,13 +13,13 @@ func Test_GenerateBucketID(t *testing.T) {
 	t.Run("level_zero", func(t *testing.T) {
 		hashKey := encode.HashKey([]byte("hello world"))
 		nodeID := domain.NodeID(hashKey)
-		bucketID := encode.GenerateBucketID(nodeID, 0)
+		bucketID := encode.MaskFromPrefix(nodeID, 0)
 		fmt.Println(hex.Dump(bucketID[:]))
 	})
 	t.Run("level_one", func(t *testing.T) {
 		hashKey := encode.HashKey([]byte("hello world"))
 		nodeID := domain.NodeID(hashKey)
-		bucketID := encode.GenerateBucketID(nodeID, 1)
+		bucketID := encode.MaskFromPrefix(nodeID, 1)
 		fmt.Println(hex.Dump(bucketID[:]))
 	})
 }

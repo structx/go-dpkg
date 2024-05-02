@@ -1,3 +1,4 @@
+// Package dht distributed hash table implementation
 package dht
 
 import (
@@ -36,7 +37,7 @@ func NewNode(ip string, port int) *Node {
 	}
 
 	for i := 0; i < domain.Replication; i++ {
-		bucketID := encode.GenerateBucketID(nodeID, i)
+		bucketID := encode.MaskFromPrefix(nodeID, i)
 
 		rt.Buckets[nodeID] = append(rt.Buckets[nodeID], &domain.Bucket{
 			ID:       bucketID,
@@ -57,9 +58,9 @@ func NewNode(ip string, port int) *Node {
 func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
 
 	hashKey := encode.HashKey(key)
-	closestBuckets := make([]domain.NodeID, domain.Replication)
+	closestBuckets := make([]domain.NodeID, 0)
 
-	targetBucketID := encode.GenerateBucketID(hashKey, 0)
+	targetBucketID := encode.MaskFromPrefix(hashKey, 0)
 	for _, levelBuckets := range n.RoutingTable.Buckets {
 
 		var bestDistance = [28]byte{
@@ -75,10 +76,10 @@ func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
 			0xFF,
 		}
 
-		for i, bucket := range levelBuckets {
+		for _, bucket := range levelBuckets {
 			distance := domain.Distance(targetBucketID).XOR(bucket.ID)
 			if compareDistances(distance, bestDistance) < 0 {
-				closestBuckets[i] = bucket.ID
+				closestBuckets = append(closestBuckets, bucket.ID)
 			}
 		}
 	}
@@ -87,11 +88,12 @@ func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
 }
 
 // FindClosestNodes iterate over bucket and find shortest contact to key
-func (n *Node) FindClosestNodes(key, bucketID domain.NodeID) []string {
+func (n *Node) FindClosestNodes(key []byte, bucketID domain.NodeID) []string {
 
-	closestNodes := make([]string, domain.Replication)
+	keyHash := encode.HashKey(key)
+	closestNodes := make([]string, 0)
 
-	for _, bucket := range n.RoutingTable.Buckets[bucketID] {
+	for _, bucket := range n.RoutingTable.Buckets[n.ID] {
 
 		var bestDistance = [28]byte{
 			0xFF, 0xFF, 0xFF,
@@ -107,8 +109,10 @@ func (n *Node) FindClosestNodes(key, bucketID domain.NodeID) []string {
 		}
 
 		for _, contact := range bucket.Contacts {
-			distance := domain.Distance(contact.ID).XOR(key)
-			if compareDistances(distance, bestDistance) < 0 {
+			distance := domain.Distance(keyHash).XOR(contact.ID)
+			if len(closestNodes) < 1 {
+				closestNodes = append(closestNodes, net.JoinHostPort(contact.IP, fmt.Sprintf("%d", contact.Port)))
+			} else if compareDistances(distance, bestDistance) < 0 {
 				closestNodes = append(closestNodes, net.JoinHostPort(contact.IP, fmt.Sprintf("%d", contact.Port)))
 			}
 		}

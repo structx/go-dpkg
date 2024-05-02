@@ -28,3 +28,14 @@ func Test_FindKClosestBuckets(t *testing.T) {
 		}
 	})
 }
+
+func Test_FindClosestNodes(t *testing.T) {
+	t.Run("default", func(t *testing.T) {
+		n := dht.NewNode("127.0.0.1", 50051)
+		k := []byte("27.0.0.77:50051")
+		bucketIDSlice := n.FindKClosestBuckets(k)
+		if len(bucketIDSlice) != 1 {
+			t.Fatal("invalid number of buckets returned")
+		}
+	})
+}

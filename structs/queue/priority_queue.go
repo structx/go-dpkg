@@ -1,4 +1,5 @@
+// Package queue implementation of queues
 package queue
 
-// PriorityQueue
+// PriorityQueue todo
 type PriorityQueue struct{}
