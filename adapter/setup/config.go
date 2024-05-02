@@ -43,22 +43,22 @@ func (cfg *Config) GetServer() domain.Server {
 }
 
 // GetRaft getter raft configuration
-func (cfg *Config) GetRaft() domain.Raft {
+func (cfg *Config) GetRaft() *domain.Raft {
 	return cfg.Raft
 }
 
 // GetChain getter chain configuration
-func (cfg *Config) GetChain() domain.Chain {
+func (cfg *Config) GetChain() *domain.Chain {
 	return cfg.Chain
 }
 
 // GetMessenger getter message broker configuration
-func (cfg *Config) GetMessenger() domain.Messenger {
+func (cfg *Config) GetMessenger() *domain.Messenger {
 	return cfg.MessageBroker
 }
 
 // GetAccessControl getter access control configuration
-func (cfg *Config) GetAccessControl() domain.AccessControl {
+func (cfg *Config) GetAccessControl() *domain.AccessControl {
 	return cfg.AccessControl
 }
 
