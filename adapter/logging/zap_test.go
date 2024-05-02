@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
 	"github.com/structx/go-pkg/adapter/logging"
 	"github.com/structx/go-pkg/adapter/setup"
 	"github.com/structx/go-pkg/util/decode"
@@ -30,5 +31,6 @@ func Test_NewLoggerFromEnv(t *testing.T) {
 		}
 
 		logger.Info("success")
+		logger.Sync()
 	})
 }
