@@ -70,6 +70,6 @@ func New(cfg domain.Config) (*zap.Logger, error) {
 	return zcfg.Build(zap.WrapCore(zapCore))
 }
 
-func zapCore(core zapcore.Core) zapcore.Core {
+func zapCore(_ zapcore.Core) zapcore.Core {
 	return c
 }

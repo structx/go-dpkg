@@ -31,6 +31,6 @@ func Test_NewLoggerFromEnv(t *testing.T) {
 		}
 
 		logger.Info("success")
-		logger.Sync()
+		_ = logger.Sync()
 	})
 }
