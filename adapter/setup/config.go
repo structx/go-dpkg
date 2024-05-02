@@ -7,12 +7,12 @@ import (
 
 // Config service config implmentation
 type Config struct {
-	Logger        domain.Logger        `hcl:"logger,block"`
-	Server        domain.Server        `hcl:"server,block"`
-	Raft          domain.Raft          `hcl:"raft,block"`
-	Chain         domain.Chain         `hcl:"chain,block"`
-	MessageBroker domain.Messenger     `hcl:"message_broker,block"`
-	AccessControl domain.AccessControl `hcl:"acl,block"`
+	Logger        domain.Logger         `hcl:"logger,block"`
+	Server        domain.Server         `hcl:"server,block"`
+	Raft          *domain.Raft          `hcl:"raft,block"`
+	Chain         *domain.Chain         `hcl:"chain,block"`
+	MessageBroker *domain.Messenger     `hcl:"message_broker,block"`
+	AccessControl *domain.AccessControl `hcl:"acl,block"`
 }
 
 // interface compliance
@@ -23,10 +23,10 @@ func New() *Config {
 	return &Config{
 		Logger:        domain.Logger{},
 		Server:        domain.Server{},
-		Raft:          domain.Raft{},
-		Chain:         domain.Chain{},
-		MessageBroker: domain.Messenger{},
-		AccessControl: domain.AccessControl{},
+		Raft:          &domain.Raft{},
+		Chain:         &domain.Chain{},
+		MessageBroker: &domain.Messenger{},
+		AccessControl: &domain.AccessControl{},
 	}
 }
 
@@ -41,21 +41,21 @@ func (cfg *Config) GetServer() domain.Server {
 }
 
 // GetRaft getter raft configuration
-func (cfg *Config) GetRaft() domain.Raft {
+func (cfg *Config) GetRaft() *domain.Raft {
 	return cfg.Raft
 }
 
 // GetChain getter chain configuration
-func (cfg *Config) GetChain() domain.Chain {
+func (cfg *Config) GetChain() *domain.Chain {
 	return cfg.Chain
 }
 
 // GetMessenger getter message broker configuration
-func (cfg *Config) GetMessenger() domain.Messenger {
+func (cfg *Config) GetMessenger() *domain.Messenger {
 	return cfg.MessageBroker
 }
 
 // GetAccessControl getter access control configuration
-func (cfg *Config) GetAccessControl() domain.AccessControl {
+func (cfg *Config) GetAccessControl() *domain.AccessControl {
 	return cfg.AccessControl
 }

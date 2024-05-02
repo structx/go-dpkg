@@ -3,6 +3,7 @@ package messagebroker
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -25,6 +26,10 @@ var _ domain.MessageBroker = (*Client)(nil)
 func New(cfg domain.Config) (*Client, error) {
 
 	mcfg := cfg.GetMessenger()
+	if mcfg == nil {
+		return nil, errors.New("missing message broker configuration")
+	}
+
 	conn, err := grpc.Dial(mcfg.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return nil, fmt.Errorf("failed to dial message broker %v", err)
@@ -116,7 +121,6 @@ func (c *Client) Subscribe(ctx context.Context, topic string) (<-chan domain.Env
 
 // RequestResponse send request and wait for response
 func (c *Client) RequestResponse(ctx context.Context, in domain.Envelope) (domain.Envelope, error) {
-
 	c.conn.Connect()
 
 	cli := pbv1.NewMessagingServiceV1Client(c.conn)
