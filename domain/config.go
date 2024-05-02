@@ -43,17 +43,19 @@ type AccessControl struct {
 }
 
 // Config service configuration interface
+//
+//go:generate mockery --name Config
 type Config interface {
 	// GetServer getter server configuration
 	GetServer() Server
 	// GetRaft getter raft configuration
-	GetRaft() Raft
+	GetRaft() *Raft
 	// GetLogger getter logger configuration
 	GetLogger() Logger
 	// GetChain getter chain configuration
-	GetChain() Chain
+	GetChain() *Chain
 	// GetMessenger getter messenger configuration
-	GetMessenger() Messenger
+	GetMessenger() *Messenger
 	// GetAccessControl getter access control configuration
-	GetAccessControl() AccessControl
+	GetAccessControl() *AccessControl
 }
