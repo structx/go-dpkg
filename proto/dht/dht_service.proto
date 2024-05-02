@@ -1,0 +1,64 @@
+
+syntax = "proto3";
+
+option go_package = "github.com/structx/go-pkg/proto/dht/v1";
+
+package dht.v1;
+
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service DHTService {
+    rpc Ping (PingRequest) returns (google.protobuf.Empty) {}
+    rpc Store (StoreRequest) returns (StoreResponse) {}
+    rpc FindNode (FindNodeRequest) returns (FindNodeResponse) {}
+    rpc FindValue (FindValueRequest) returns (FindValueResponse) {}
+}
+
+message Sender {
+    bytes sender_id = 1;
+    google.protobuf.Timestamp requested_at = 2;
+}
+
+message Echo {
+    bytes rpc_id = 1;
+    google.protobuf.Timestamp completed_at = 2;
+}
+
+message Contact {
+    string ip = 1;
+    int64 port = 2;
+    bytes node_id = 3;
+}
+
+message PingRequest {
+    Sender sender = 1;
+}
+
+message StoreRequest {
+    Sender sender = 1;
+    bytes key = 2;
+    bytes value = 3;
+}
+
+message StoreResponse {
+    Echo echo = 1;
+}
+
+message FindNodeRequest {
+    Sender sender = 1;
+    bytes node_id = 2;
+}
+
+message FindNodeResponse {
+    Echo echo = 1;
+    repeated Contact contact_list = 2;
+}
+
+message FindValueRequest {
+    Sender sender = 1;
+}
+
+message FindValueResponse {
+    Echo echo = 1;
+}

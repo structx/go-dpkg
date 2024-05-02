@@ -7,12 +7,13 @@ import (
 
 // Config service config implmentation
 type Config struct {
-	Logger        domain.Logger        `hcl:"logger,block"`
-	Server        domain.Server        `hcl:"server,block"`
-	Raft          domain.Raft          `hcl:"raft,block"`
-	Chain         domain.Chain         `hcl:"chain,block"`
-	MessageBroker domain.Messenger     `hcl:"message_broker,block"`
-	AccessControl domain.AccessControl `hcl:"acl,block"`
+	Logger               domain.Logger                `hcl:"logger,block"`
+	Server               domain.Server                `hcl:"server,block"`
+	Raft                 *domain.Raft                 `hcl:"raft,block"`
+	Chain                *domain.Chain                `hcl:"chain,block"`
+	MessageBroker        *domain.Messenger            `hcl:"message_broker,block"`
+	AccessControl        *domain.AccessControl        `hcl:"acl,block"`
+	DistributedHashTable *domain.DistributedHashTable `hcl:"dht,block"`
 }
 
 // interface compliance
@@ -21,12 +22,13 @@ var _ domain.Config = (*Config)(nil)
 // New config constructor
 func New() *Config {
 	return &Config{
-		Logger:        domain.Logger{},
-		Server:        domain.Server{},
-		Raft:          domain.Raft{},
-		Chain:         domain.Chain{},
-		MessageBroker: domain.Messenger{},
-		AccessControl: domain.AccessControl{},
+		Logger:               domain.Logger{},
+		Server:               domain.Server{},
+		Raft:                 &domain.Raft{},
+		Chain:                &domain.Chain{},
+		MessageBroker:        &domain.Messenger{},
+		AccessControl:        &domain.AccessControl{},
+		DistributedHashTable: &domain.DistributedHashTable{},
 	}
 }
 
@@ -58,4 +60,9 @@ func (cfg *Config) GetMessenger() domain.Messenger {
 // GetAccessControl getter access control configuration
 func (cfg *Config) GetAccessControl() domain.AccessControl {
 	return cfg.AccessControl
+}
+
+// GetDistributedHashTable getter distributed hash table configuration
+func (cfg *Config) GetDistributedHashTable() *domain.DistributedHashTable {
+	return cfg.DistributedHashTable
 }

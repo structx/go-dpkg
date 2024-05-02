@@ -42,6 +42,15 @@ type AccessControl struct {
 	ServerAddr string `hcl:"server_addr"`
 }
 
+// DistributedHashTable configuration
+type DistributedHashTable struct {
+	BindAddr      string  `hcl:"bind_addr"`
+	AdvertiseAddr *string `hcl:"advertise_addr"`
+	Ports         struct {
+		GRPC int `hcl:"grpc"`
+	} `hcl:"ports"`
+}
+
 // Config service configuration interface
 type Config interface {
 	// GetServer getter server configuration
@@ -55,5 +64,7 @@ type Config interface {
 	// GetMessenger getter messenger configuration
 	GetMessenger() Messenger
 	// GetAccessControl getter access control configuration
-	GetAccessControl() AccessControl
+	GetAccessControl() *AccessControl
+	// GetDistributedHashTable getter distributed hash table configuration
+	GetDistributedHashTable() *DistributedHashTable
 }
