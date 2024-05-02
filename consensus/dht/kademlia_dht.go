@@ -8,7 +8,7 @@ import (
 	"github.com/structx/go-pkg/util/encode"
 )
 
-// Node
+// Node kademlia distributed hash table node
 type Node struct {
 	ID           domain.NodeID
 	RoutingTable *domain.RoutingTable
@@ -17,7 +17,7 @@ type Node struct {
 // interface compliance
 var _ domain.DHT = (*Node)(nil)
 
-// NewNode
+// NewNode constructor
 func NewNode(ip string, port int) *Node {
 
 	addr := fmt.Sprintf("%s:%d", ip, port)
@@ -53,7 +53,7 @@ func NewNode(ip string, port int) *Node {
 	}
 }
 
-// FindKClosestBuckets
+// FindKClosestBuckets iterate over buckets and find shortest distance to key
 func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
 
 	hashKey := encode.HashKey(key)
@@ -75,10 +75,10 @@ func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
 			0xFF,
 		}
 
-		for _, bucket := range levelBuckets {
+		for i, bucket := range levelBuckets {
 			distance := domain.Distance(targetBucketID).XOR(bucket.ID)
 			if compareDistances(distance, bestDistance) < 0 {
-				closestBuckets = append(closestBuckets, bucket.ID)
+				closestBuckets[i] = bucket.ID
 			}
 		}
 	}
@@ -86,8 +86,8 @@ func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
 	return closestBuckets
 }
 
-// FindClosestNodes
-func (n *Node) FindClosestNodes(bucketID, key domain.NodeID) []string {
+// FindClosestNodes iterate over bucket and find shortest contact to key
+func (n *Node) FindClosestNodes(key, bucketID domain.NodeID) []string {
 
 	closestNodes := make([]string, domain.Replication)
 
