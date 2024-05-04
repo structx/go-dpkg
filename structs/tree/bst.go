@@ -37,7 +37,7 @@ func (b *BST) AddNode(n *Node) {
 
 	h := b.head
 
-	if n.payload < b.head.payload {
+	if n.payload < h.payload {
 		if h.left == nil {
 			h.left = n
 			return

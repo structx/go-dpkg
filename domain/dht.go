@@ -1,5 +1,11 @@
 package domain
 
+import (
+	"fmt"
+
+	"github.com/structx/go-pkg/util/encode"
+)
+
 const (
 	// Replication defined as maximum bucket size and
 	// a replication factor
@@ -7,7 +13,7 @@ const (
 	// for example, the bucket can only grow to k
 	// amount of nodes and it would be unlikely
 	// for all nodes in an hour timespan to fail
-	Replication = 3
+	DefaultReplicationFactor = 3
 	// Concurrent number of threads to use for connecting to
 	// other dht nodes
 	Concurrent = 3
@@ -35,6 +41,11 @@ type Contact struct {
 	IP   string
 	Port int
 	ID   NodeID
+}
+
+// SetID of contact
+func (c *Contact) SetID() {
+	c.ID = encode.HashKey([]byte(fmt.Sprintf("%s:%d", c.IP, c.Port)))
 }
 
 // Bucket in dht node
