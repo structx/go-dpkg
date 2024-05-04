@@ -2,6 +2,7 @@
 package kv
 
 import (
+	"errors"
 	"fmt"
 	"path/filepath"
 
@@ -25,6 +26,10 @@ var _ domain.KV = (*PebbleDB)(nil)
 func NewPebble(logger *zap.Logger, cfg domain.Config) (*PebbleDB, error) {
 
 	ccfg := cfg.GetChain()
+	if ccfg == nil {
+		return nil, errors.New("missing chain configuration")
+	}
+
 	suggaredLogger := logger.Named("PebbleRepository").Sugar()
 
 	opts := &pebble.Options{Logger: suggaredLogger}
