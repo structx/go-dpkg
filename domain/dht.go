@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	// Replication defined as maximum bucket size and
+	// DefaultReplicationFactor defined as maximum bucket size and
 	// a replication factor
 	//
 	// for example, the bucket can only grow to k
