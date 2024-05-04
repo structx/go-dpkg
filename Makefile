@@ -10,9 +10,12 @@ lint:
 	golangci-lint run
 
 rpc:
-	protoc --go_out=proto/messaging/v1 --go_opt=paths=source_relative \
-    --go-grpc_out=proto/messaging/v1 --go-grpc_opt=paths=source_relative \
+	protoc --go_out=. --go_opt=paths=source_relative \
+    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
     proto/messaging/messaging_service.proto
+	protoc --go_out=. --go_opt=paths=source_relative \
+    --go-grpc_out=. --go-grpc_opt=paths=source_relative \
+    proto/dht/dht_service.proto
 
 test:
 	go test -v ./...

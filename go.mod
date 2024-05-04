@@ -6,6 +6,7 @@ require (
 	github.com/Jille/raft-grpc-transport v1.5.0
 	github.com/cockroachdb/pebble v1.1.0
 	github.com/go-chi/chi/v5 v5.0.12
+	github.com/golang/protobuf v1.5.2
 	github.com/hashicorp/go-hclog v1.6.2
 	github.com/hashicorp/hcl/v2 v2.20.1
 	github.com/hashicorp/raft v1.6.1
@@ -35,7 +36,6 @@ require (
 	github.com/fatih/color v1.13.0 // indirect
 	github.com/getsentry/sentry-go v0.18.0 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
