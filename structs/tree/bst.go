@@ -5,6 +5,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"sync"
 	"sync/atomic"
 
 	"github.com/structx/go-pkg/domain"
@@ -236,7 +237,12 @@ func (b *BST) Close() error {
 
 // ExecuteOp on tree
 func (b *BST) ExecuteOp(ctx context.Context, op Op) {
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
 	go func() {
+		defer wg.Done()
 		select {
 		case <-ctx.Done():
 			return
@@ -244,6 +250,8 @@ func (b *BST) ExecuteOp(ctx context.Context, op Op) {
 			b.ch <- op
 		}
 	}()
+
+	wg.Wait()
 }
 
 // ExecuteSearch on tree

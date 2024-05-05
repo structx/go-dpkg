@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
 	"github.com/structx/go-pkg/structs/tree"
 	"github.com/structx/go-pkg/util/encode"
 )
