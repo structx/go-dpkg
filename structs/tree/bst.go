@@ -12,145 +12,110 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// OpEnum operation type
-type OpEnum int
+// opEnum operation type
+type opEnum int
 
 const (
-	// Insert insert
-	Insert OpEnum = iota
-	// Search search
-	Search
-	// Delete delete
-	Delete
+	// insert
+	insertOp opEnum = iota
+	// search
+	searchOp
+	// delete
+	deleteOp
 )
 
-// Op operation
-type Op interface {
-	// GetType getter operation type
-	GetType() OpEnum
-	// GetKey getter operation node key
-	GetKey() [28]byte
-	// GetValue getter operation node value
-	GetValue() interface{}
+// bst operation
+type op interface {
+	// getter operation type
+	getType() opEnum
+	// getter operation node key
+	getKey() [28]byte
+	// getter operation node value
+	getValue() interface{}
 }
 
-// SearchParams operation parameters
-type SearchParams struct {
+type searchParams struct {
 	key [28]byte
-	op  OpEnum
+	op  opEnum
 	ch  chan SearchResult
 }
 
-// SearchResult operation result
+// SearchResult operation search result
 type SearchResult struct {
 	key   [28]byte
 	value interface{}
 }
 
-// GetKey getter operation result node key
+// GetKey getter search result key
 func (sr *SearchResult) GetKey() [28]byte {
 	return sr.key
 }
 
-// GetValue getter operation result node value
+// GetValue getter search result value
 func (sr *SearchResult) GetValue() interface{} {
 	return sr.value
 }
 
-// NewSearchParams constructor
-func NewSearchParams(key [28]byte) *SearchParams {
-	return &SearchParams{
-		key: key,
-		op:  Search,
-	}
-}
-
-// GetType getter operation type
-func (sp *SearchParams) GetType() OpEnum {
+func (sp *searchParams) getType() opEnum {
 	return sp.op
 }
 
-// GetKey getter operation node key
-func (sp *SearchParams) GetKey() [28]byte {
+func (sp *searchParams) getKey() [28]byte {
 	return sp.key
 }
 
-// GetValue not implemented
-func (sp *SearchParams) GetValue() interface{} {
+// not implemented
+func (sp *searchParams) getValue() interface{} {
 	return nil
 }
 
-// InsertParams operation
-type InsertParams struct {
-	op    OpEnum
+type insertParams struct {
+	op    opEnum
 	key   [28]byte
 	value interface{}
+	ch    chan struct{}
 }
 
-// NewInsertParams constructor
-func NewInsertParams(key [28]byte, value interface{}) *InsertParams {
-	return &InsertParams{
-		op:    Insert,
-		key:   key,
-		value: value,
-	}
-}
-
-// GetType getter operation type
-func (ip *InsertParams) GetType() OpEnum {
+func (ip *insertParams) getType() opEnum {
 	return ip.op
 }
 
-// GetKey getter operation node key
-func (ip *InsertParams) GetKey() [28]byte {
+func (ip *insertParams) getKey() [28]byte {
 	return ip.key
 }
 
-// GetValue getter operation node value
-func (ip *InsertParams) GetValue() interface{} {
+func (ip *insertParams) getValue() interface{} {
 	return ip.value
 }
 
-// DeleteParams operation
-type DeleteParams struct {
-	op  OpEnum
+type deleteParams struct {
+	op  opEnum
 	key [28]byte
+	ch  chan struct{}
 }
 
-// NewDeleteParams constructor
-func NewDeleteParams(key [28]byte) *DeleteParams {
-	return &DeleteParams{
-		op:  Delete,
-		key: key,
-	}
-}
-
-// GetType operation type
-func (dp *DeleteParams) GetType() OpEnum {
+func (dp *deleteParams) getType() opEnum {
 	return dp.op
 }
 
-// GetKey operation node key
-func (dp *DeleteParams) GetKey() [28]byte {
+func (dp *deleteParams) getKey() [28]byte {
 	return dp.key
 }
 
-// GetValue not implemented
-func (dp *DeleteParams) GetValue() interface{} {
+// not implemented
+func (dp *deleteParams) getValue() interface{} {
 	return nil
 }
 
-// Node in tree
-type Node struct {
+type node struct {
 	atomicKey   atomic.Uint64
 	value       interface{}
-	left, right *Node
+	left, right *node
 }
 
-// NewNode constructor
-func NewNode(key [28]byte, value interface{}) *Node {
+func newNode(key [28]byte, value interface{}) *node {
 
-	var n Node
+	var n node
 
 	v := bytesToUint64(key)
 
@@ -166,17 +131,17 @@ func NewNode(key [28]byte, value interface{}) *Node {
 }
 
 // GetKey getter node key
-func (n *Node) GetKey() [28]byte {
+func (n *node) GetKey() [28]byte {
 	v := n.atomicKey.Load()
 	return uint64ToBytes(v)
 }
 
 // GetValue getter node value
-func (n *Node) GetValue() interface{} {
+func (n *node) GetValue() interface{} {
 	return n.value
 }
 
-func (n *Node) inOrder(key uint64) *Node {
+func (n *node) inOrder(key uint64) *node {
 
 	if n == nil {
 		return nil
@@ -200,13 +165,13 @@ func (n *Node) inOrder(key uint64) *Node {
 
 // BST binary search tree
 type BST struct {
-	head *Node
+	head *node
 
 	// concurrency
 	cc       int
 	errGroup *errgroup.Group
 	baseCtx  context.Context
-	ch       chan Op
+	ch       chan op
 }
 
 // NewBSTWithDefault constructor with default values
@@ -221,7 +186,7 @@ func NewBSTWithDefault() *BST {
 // Run create and start workers
 func (b *BST) Run(ctx context.Context) {
 
-	b.ch = make(chan Op)
+	b.ch = make(chan op)
 
 	b.errGroup, b.baseCtx = errgroup.WithContext(ctx)
 	for i := 0; i < b.cc; i++ {
@@ -243,55 +208,117 @@ func (b *BST) Close() error {
 	return b.errGroup.Wait()
 }
 
-// ExecuteOp on tree
-func (b *BST) ExecuteOp(ctx context.Context, op Op) {
+// Insert into tree
+func (b *BST) Insert(ctx context.Context, key [28]byte, value interface{}) {
 
+	p := &insertParams{
+		op:    insertOp,
+		key:   key,
+		value: value,
+		ch:    make(chan struct{}),
+	}
 	var wg sync.WaitGroup
 	wg.Add(1)
 
+	// wait for acknowledgement
 	go func() {
-		defer wg.Done()
-		select {
-		case <-ctx.Done():
-			return
-		default:
-			b.ch <- op
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-p.ch:
+				wg.Done()
+				return
+			}
 		}
 	}()
 
-	wg.Wait()
-}
-
-// ExecuteSearch on tree
-func (b *BST) ExecuteSearch(ctx context.Context, op Op) interface{} {
-
-	p, ok := op.(*SearchParams)
-	if !ok {
-		return nil
-	}
-	p.ch = make(chan SearchResult, 1)
-	defer close(p.ch)
-
-	// send request through channel
+	// send request
 	go func() {
 		b.ch <- p
 	}()
 
-	for {
-		select {
-		case <-ctx.Done():
-			return nil
-		case output, ok := <-p.ch:
-			if !ok {
-				return nil
-			}
-
-			return output
-		}
-	}
+	// wait for acknowledge received
+	wg.Wait()
 }
 
-func (b *BST) insert(n *Node) {
+// Search on tree
+func (b *BST) Search(ctx context.Context, key [28]byte) *SearchResult {
+
+	p := &searchParams{
+		key: key,
+		op:  searchOp,
+		ch:  make(chan SearchResult, 1),
+	}
+	defer close(p.ch)
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	var output SearchResult
+
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case result, ok := <-p.ch:
+				if !ok {
+					return
+				}
+				wg.Done()
+				output = result
+				return
+			}
+		}
+	}()
+
+	// send request
+	go func() {
+		b.ch <- p
+	}()
+
+	// wait for result
+	wg.Wait()
+
+	return &output
+}
+
+// Delete key in tree
+func (b *BST) Delete(ctx context.Context, key [28]byte) {
+
+	p := &deleteParams{
+		key: key,
+		op:  deleteOp,
+		ch:  make(chan struct{}),
+	}
+
+	var wg sync.WaitGroup
+	wg.Add(1)
+
+	// wait for acknowledgement
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case <-p.ch:
+				wg.Done()
+				return
+			}
+		}
+	}()
+
+	// send request
+	go func() {
+		b.ch <- p
+	}()
+
+	// wait for acknowledge received
+	wg.Wait()
+}
+
+func (b *BST) insert(n *node) {
 
 	if b.head == nil {
 		b.head = n
@@ -321,7 +348,7 @@ func (b *BST) insert(n *Node) {
 }
 
 // visits nodes in order left, root, right
-func (b *BST) traverseInOrder(key [28]byte) *Node {
+func (b *BST) traverseInOrder(key [28]byte) *node {
 
 	keyInt := bytesToUint64(key)
 
@@ -394,7 +421,7 @@ func (b *BST) delete(key [28]byte) {
 	}
 }
 
-func (b *BST) worker(ctx context.Context, ch <-chan Op) error {
+func (b *BST) worker(ctx context.Context, ch <-chan op) error {
 
 	for {
 		select {
@@ -402,45 +429,58 @@ func (b *BST) worker(ctx context.Context, ch <-chan Op) error {
 			return nil
 		case op, ok := <-ch:
 			if !ok {
-				return errors.New("channel closed")
+				return nil
 			}
 
-			switch op.GetType() {
-			case Insert:
+			switch op.getType() {
+			case insertOp:
 
-				p, ok := op.(*InsertParams)
+				p, ok := op.(*insertParams)
 				if !ok {
 					return errors.New("unable to cast operation as insert params")
 				}
 
-				n := NewNode(p.key, p.value)
+				n := newNode(p.key, p.value)
 				b.insert(n)
 
-			case Search:
-				p, ok := op.(*SearchParams)
+				// acknowledge operation completion
+				p.ch <- struct{}{}
+
+			case searchOp:
+				p, ok := op.(*searchParams)
 				if !ok {
 					return errors.New("unable to cast operation as search params")
 				}
 
 				n := b.traverseInOrder(p.key)
-				if n == nil || n.value == nil {
+				if n == nil {
 					p.ch <- SearchResult{}
 					continue
 				}
-				p.ch <- SearchResult{
-					key:   n.GetKey(),
-					value: n.value,
+
+				var v interface{}
+				if n.value != nil {
+					v = n.value
 				}
 
-			case Delete:
-				p, ok := op.(*DeleteParams)
+				p.ch <- SearchResult{
+					key:   n.GetKey(),
+					value: v,
+				}
+
+			case deleteOp:
+				p, ok := op.(*deleteParams)
 				if !ok {
 					return errors.New("unable to cast operation as delete params")
 				}
 
 				b.delete(p.key)
+
+				// acknowledge operation completion
+				p.ch <- struct{}{}
+
 			default:
-				// unsuported operation
+				// unsuported operation ignore
 				continue
 			}
 		}
