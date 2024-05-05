@@ -117,6 +117,14 @@ type DeleteParams struct {
 	key [28]byte
 }
 
+// NewDeleteParams
+func NewDeleteParams(key [28]byte) *DeleteParams {
+	return &DeleteParams{
+		op:  Delete,
+		key: key,
+	}
+}
+
 // GetType operation type
 func (dp *DeleteParams) GetType() OpEnum {
 	return dp.op
