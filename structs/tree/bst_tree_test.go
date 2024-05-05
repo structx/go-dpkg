@@ -32,14 +32,14 @@ func Test_Search(t *testing.T) {
 
 	ctx := context.TODO()
 
-	k := encode.HashKey([]byte("1"))
-	expected := "1"
+	k := encode.HashKey([]byte("3"))
+	expected := "3"
 
 	bst := tree.NewBSTWithDefault()
 	bst.Run(ctx)
 	defer func() { _ = bst.Close() }()
 
-	op1 := tree.NewInsertParams(encode.HashKey([]byte("3")), "3")
+	op1 := tree.NewInsertParams(k, "3")
 	op2 := tree.NewInsertParams(encode.HashKey([]byte("2")), "2")
 	op3 := tree.NewInsertParams(encode.HashKey([]byte("1")), "1")
 

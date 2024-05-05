@@ -319,7 +319,7 @@ func (b *BST) traverseInOrder(key [28]byte) *Node {
 		return result
 	}
 
-	// check root node (early return if found)
+	// check root node
 	if b.head.atomicKey.Load() == keyInt {
 		return b.head
 	}
