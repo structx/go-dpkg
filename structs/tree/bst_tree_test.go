@@ -10,22 +10,18 @@ import (
 	"github.com/structx/go-pkg/util/encode"
 )
 
-func Test_Insert(_ *testing.T) {
+func Test_Insert(t *testing.T) {
 
 	ctx := context.TODO()
-	// assert := suite.Assert()
+	assert := assert.New(t)
 	bst := tree.NewBSTWithDefault()
 
 	bst.Run(ctx)
-	defer func() { _ = bst.Close() }()
+	defer func() { assert.NoError(bst.Close()) }()
 
-	op1 := tree.NewInsertParams(encode.HashKey([]byte("6")), "6")
-	op2 := tree.NewInsertParams(encode.HashKey([]byte("5")), "5")
-	op3 := tree.NewInsertParams(encode.HashKey([]byte("4")), "4")
-
-	bst.ExecuteOp(ctx, op1)
-	bst.ExecuteOp(ctx, op2)
-	bst.ExecuteOp(ctx, op3)
+	bst.Insert(ctx, encode.HashKey([]byte("6")), "6")
+	bst.Insert(ctx, encode.HashKey([]byte("5")), "5")
+	bst.Insert(ctx, encode.HashKey([]byte("4")), "4")
 }
 
 func Test_Search(t *testing.T) {
@@ -39,21 +35,14 @@ func Test_Search(t *testing.T) {
 
 	bst := tree.NewBSTWithDefault()
 	bst.Run(ctx)
-	defer func() { _ = bst.Close() }()
+	defer func() { assert.NoError(bst.Close()) }()
 
-	op1 := tree.NewInsertParams(encode.HashKey([]byte("3")), "3")
-	op2 := tree.NewInsertParams(encode.HashKey([]byte("2")), "2")
-	op3 := tree.NewInsertParams(encode.HashKey([]byte("1")), "1")
+	bst.Insert(ctx, encode.HashKey([]byte("3")), "3")
+	bst.Insert(ctx, encode.HashKey([]byte("2")), "2")
+	bst.Insert(ctx, encode.HashKey([]byte("1")), "1")
 
-	bst.ExecuteOp(ctx, op1)
-	bst.ExecuteOp(ctx, op2)
-	bst.ExecuteOp(ctx, op3)
-
-	sp := tree.NewSearchParams(k)
-	result := bst.ExecuteSearch(ctx, sp)
-
-	v1 := result.(tree.SearchResult)
-	assert.Equal(expected, v1.GetValue())
+	result := bst.Search(ctx, k)
+	assert.Equal(expected, result.GetValue())
 }
 
 func Test_Delete(t *testing.T) {
@@ -66,20 +55,14 @@ func Test_Delete(t *testing.T) {
 
 	bst := tree.NewBSTWithDefault()
 	bst.Run(ctx)
-	defer func() { _ = bst.Close() }()
+	defer func() { assert.NoError(bst.Close()) }()
 
-	op1 := tree.NewInsertParams(encode.HashKey([]byte("3")), "3")
-	op2 := tree.NewInsertParams(encode.HashKey([]byte("2")), "2")
-	op3 := tree.NewInsertParams(encode.HashKey([]byte("1")), "1")
+	bst.Insert(ctx, encode.HashKey([]byte("3")), "3")
+	bst.Insert(ctx, encode.HashKey([]byte("2")), "2")
+	bst.Insert(ctx, encode.HashKey([]byte("1")), "1")
 
-	bst.ExecuteOp(ctx, op1)
-	bst.ExecuteOp(ctx, op2)
-	bst.ExecuteOp(ctx, op3)
+	bst.Delete(ctx, k)
 
-	bst.ExecuteOp(ctx, tree.NewDeleteParams(k))
-
-	output := bst.ExecuteSearch(ctx, tree.NewSearchParams(k1))
-
-	result, _ := output.(tree.SearchResult)
+	result := bst.Search(ctx, k1)
 	assert.Equal("1", result.GetValue())
 }
