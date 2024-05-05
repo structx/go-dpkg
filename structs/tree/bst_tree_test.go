@@ -2,6 +2,7 @@ package tree_test
 
 import (
 	"context"
+	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -32,20 +33,29 @@ func Test_Search(t *testing.T) {
 
 	ctx := context.TODO()
 
-	k := encode.HashKey([]byte("3"))
-	expected := "3"
+	k := encode.HashKey([]byte("1"))
+	expected := "1"
 
 	bst := tree.NewBSTWithDefault()
 	bst.Run(ctx)
 	defer func() { _ = bst.Close() }()
 
-	op1 := tree.NewInsertParams(k, "3")
-	op2 := tree.NewInsertParams(encode.HashKey([]byte("2")), "2")
-	op3 := tree.NewInsertParams(encode.HashKey([]byte("1")), "1")
+	var wg sync.WaitGroup
+	wg.Add(1)
 
-	bst.ExecuteOp(ctx, op1)
-	bst.ExecuteOp(ctx, op2)
-	bst.ExecuteOp(ctx, op3)
+	go func() {
+		defer wg.Done()
+
+		op1 := tree.NewInsertParams(encode.HashKey([]byte("3")), "3")
+		op2 := tree.NewInsertParams(encode.HashKey([]byte("2")), "2")
+		op3 := tree.NewInsertParams(encode.HashKey([]byte("1")), "1")
+
+		bst.ExecuteOp(ctx, op1)
+		bst.ExecuteOp(ctx, op2)
+		bst.ExecuteOp(ctx, op3)
+	}()
+
+	wg.Wait()
 
 	sp := tree.NewSearchParams(k)
 	result := bst.ExecuteSearch(ctx, sp)
