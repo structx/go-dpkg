@@ -2,7 +2,6 @@ package tree_test
 
 import (
 	"context"
-	"sync"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -17,7 +16,8 @@ func Test_Insert(_ *testing.T) {
 	// assert := suite.Assert()
 	bst := tree.NewBSTWithDefault()
 
-	go bst.Run(ctx)
+	bst.Run(ctx)
+	defer func() { _ = bst.Close() }()
 
 	op1 := tree.NewInsertParams(encode.HashKey([]byte("6")), "6")
 	op2 := tree.NewInsertParams(encode.HashKey([]byte("5")), "5")
@@ -41,22 +41,13 @@ func Test_Search(t *testing.T) {
 	bst.Run(ctx)
 	defer func() { _ = bst.Close() }()
 
-	var wg sync.WaitGroup
-	wg.Add(1)
+	op1 := tree.NewInsertParams(encode.HashKey([]byte("3")), "3")
+	op2 := tree.NewInsertParams(encode.HashKey([]byte("2")), "2")
+	op3 := tree.NewInsertParams(encode.HashKey([]byte("1")), "1")
 
-	go func() {
-		defer wg.Done()
-
-		op1 := tree.NewInsertParams(encode.HashKey([]byte("3")), "3")
-		op2 := tree.NewInsertParams(encode.HashKey([]byte("2")), "2")
-		op3 := tree.NewInsertParams(encode.HashKey([]byte("1")), "1")
-
-		bst.ExecuteOp(ctx, op1)
-		bst.ExecuteOp(ctx, op2)
-		bst.ExecuteOp(ctx, op3)
-	}()
-
-	wg.Wait()
+	bst.ExecuteOp(ctx, op1)
+	bst.ExecuteOp(ctx, op2)
+	bst.ExecuteOp(ctx, op3)
 
 	sp := tree.NewSearchParams(k)
 	result := bst.ExecuteSearch(ctx, sp)
