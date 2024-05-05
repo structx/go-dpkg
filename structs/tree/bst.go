@@ -117,7 +117,7 @@ type DeleteParams struct {
 	key [28]byte
 }
 
-// NewDeleteParams
+// NewDeleteParams constructor
 func NewDeleteParams(key [28]byte) *DeleteParams {
 	return &DeleteParams{
 		op:  Delete,
