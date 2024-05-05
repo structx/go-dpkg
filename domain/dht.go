@@ -1,6 +1,7 @@
 package domain
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/structx/go-pkg/util/encode"
@@ -62,7 +63,7 @@ type RoutingTable struct {
 // DHT k-buckets distributed hash table
 type DHT interface {
 	// FindKClosestBuckets iterate over all buckets and compare key to bucket id
-	FindKClosestBuckets(key []byte) []NodeID224
+	FindKClosestBuckets(ctx context.Context, key []byte) []NodeID224
 	// FindClosestNodes iterate over buckets and find closest contact addresses
-	FindClosestNodes(key []byte, nodeID NodeID224) []string
+	FindClosestNodes(ctx context.Context, key []byte, nodeID NodeID224) []string
 }
