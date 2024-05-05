@@ -11,7 +11,7 @@ import (
 
 // Node kademlia distributed hash table node
 type Node struct {
-	ID           domain.NodeID
+	ID           domain.NodeID224
 	RoutingTable *domain.RoutingTable
 
 	replicationFactor int
@@ -26,7 +26,7 @@ func NewNode(ip string, port, replicationFactor int) *Node {
 	addr := fmt.Sprintf("%s:%d", ip, port)
 	nodeID := encode.HashKey([]byte(addr))
 
-	var contactID domain.NodeID = nodeID
+	var contactID domain.NodeID224 = nodeID
 
 	c := &domain.Contact{
 		IP:   ip,
@@ -35,7 +35,7 @@ func NewNode(ip string, port, replicationFactor int) *Node {
 	}
 
 	rt := &domain.RoutingTable{
-		Buckets: map[domain.NodeID][]*domain.Bucket{},
+		Buckets: map[domain.NodeID224][]*domain.Bucket{},
 	}
 
 	for i := 0; i < replicationFactor; i++ {
@@ -63,7 +63,7 @@ func NewNodeWithDefault(ip string, port int) *Node {
 	addr := fmt.Sprintf("%s:%d", ip, port)
 	nodeID := encode.HashKey([]byte(addr))
 
-	var contactID domain.NodeID = nodeID
+	var contactID domain.NodeID224 = nodeID
 
 	c := &domain.Contact{
 		Port: port,
@@ -72,7 +72,7 @@ func NewNodeWithDefault(ip string, port int) *Node {
 	c.SetID()
 
 	rt := &domain.RoutingTable{
-		Buckets: map[domain.NodeID][]*domain.Bucket{},
+		Buckets: map[domain.NodeID224][]*domain.Bucket{},
 	}
 
 	for i := 0; i < domain.DefaultReplicationFactor; i++ {
@@ -95,10 +95,10 @@ func NewNodeWithDefault(ip string, port int) *Node {
 }
 
 // FindKClosestBuckets iterate over buckets and find shortest distance to key
-func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
+func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID224 {
 
 	keyHash := encode.HashKey(key)
-	closestBuckets := make([]domain.NodeID, 0, n.replicationFactor)
+	closestBuckets := make([]domain.NodeID224, 0, n.replicationFactor)
 
 	// targetBucketID := encode.MaskFromPrefix(hashKey, 0)
 	for nodeID, levelBuckets := range n.RoutingTable.Buckets {
@@ -128,7 +128,7 @@ func (n *Node) FindKClosestBuckets(key []byte) []domain.NodeID {
 }
 
 // FindClosestNodes iterate over bucket and find shortest contact to key
-func (n *Node) FindClosestNodes(key []byte, bucketID domain.NodeID) []string {
+func (n *Node) FindClosestNodes(key []byte, bucketID domain.NodeID224) []string {
 
 	keyHash := encode.HashKey(key)
 	closestNodes := make([]string, 0, n.replicationFactor)
@@ -175,7 +175,7 @@ func (n *Node) AddOrUpdateNode(c *domain.Contact) {
 	n.RoutingTable.Buckets[c.ID][0].Contacts = append(n.RoutingTable.Buckets[c.ID][0].Contacts, c)
 }
 
-func compareDistances(a, b domain.NodeID) int {
+func compareDistances(a, b domain.NodeID224) int {
 	for i := range a {
 		if a[i] < b[i] {
 			return -1

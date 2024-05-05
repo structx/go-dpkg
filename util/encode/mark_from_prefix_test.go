@@ -16,7 +16,7 @@ func Test_GenerateBucketID(t *testing.T) {
 		assert := assert.New(t)
 
 		hashKey := encode.HashKey([]byte("hello world"))
-		nodeID := domain.NodeID(hashKey)
+		nodeID := domain.NodeID224(hashKey)
 		bucketID := encode.MaskFromPrefix(nodeID, 0)
 		assert.NotNil(bucketID)
 		fmt.Println(hex.Dump(bucketID[:]))
@@ -26,7 +26,7 @@ func Test_GenerateBucketID(t *testing.T) {
 		assert := assert.New(t)
 
 		hashKey := encode.HashKey([]byte("hello world"))
-		nodeID := domain.NodeID(hashKey)
+		nodeID := domain.NodeID224(hashKey)
 		bucketID := encode.MaskFromPrefix(nodeID, 1)
 		assert.NotNil(bucketID)
 		fmt.Println(hex.Dump(bucketID[:]))

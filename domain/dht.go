@@ -19,17 +19,17 @@ const (
 	Concurrent = 3
 )
 
-// NodeID 224 bit sha3 hash
+// NodeID224 224 bit sha3 hash
 // 224 bits / 8 bits/byte = 28 bytes
-type NodeID [28]byte
+type NodeID224 [28]byte
 
 // Distance between two nodes
-type Distance NodeID
+type Distance NodeID224
 
 // XOR based Distance between two nodes
-func (d Distance) XOR(n NodeID) NodeID {
+func (d Distance) XOR(n NodeID224) NodeID224 {
 	// perform bitwise XOR operation between node IDs
-	result := NodeID{}
+	result := NodeID224{}
 	for i := range d {
 		result[i] = d[i] ^ n[i]
 	}
@@ -40,7 +40,7 @@ func (d Distance) XOR(n NodeID) NodeID {
 type Contact struct {
 	IP   string
 	Port int
-	ID   NodeID
+	ID   NodeID224
 }
 
 // SetID of contact
@@ -50,19 +50,19 @@ func (c *Contact) SetID() {
 
 // Bucket in dht node
 type Bucket struct {
-	ID       NodeID
+	ID       NodeID224
 	Contacts []*Contact
 }
 
 // RoutingTable with logarithmic structure
 type RoutingTable struct {
-	Buckets map[NodeID][]*Bucket // multi-dimensional slice for buckets at different levels
+	Buckets map[NodeID224][]*Bucket // multi-dimensional slice for buckets at different levels
 }
 
 // DHT k-buckets distributed hash table
 type DHT interface {
 	// FindKClosestBuckets iterate over all buckets and compare key to bucket id
-	FindKClosestBuckets(key []byte) []NodeID
+	FindKClosestBuckets(key []byte) []NodeID224
 	// FindClosestNodes iterate over buckets and find closest contact addresses
-	FindClosestNodes(key []byte, nodeID NodeID) []string
+	FindClosestNodes(key []byte, nodeID NodeID224) []string
 }
