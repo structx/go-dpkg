@@ -33,7 +33,7 @@ func NewClient(address string) (*Client, error) {
 }
 
 // FindNode gRPC client call
-func (c *Client) FindNode(ctx context.Context, nodeID, sender domain.NodeID) ([]*domain.Contact, error) {
+func (c *Client) FindNode(ctx context.Context, nodeID, sender domain.NodeID224) ([]*domain.Contact, error) {
 	c.conn.Connect()
 
 	timeout, cancel := context.WithTimeout(ctx, time.Millisecond*200)
@@ -56,7 +56,7 @@ func (c *Client) FindNode(ctx context.Context, nodeID, sender domain.NodeID) ([]
 		contactSlice = append(contactSlice, &domain.Contact{
 			IP:   c.Ip,
 			Port: int(c.GetPort()),
-			ID:   domain.NodeID(c.NodeId),
+			ID:   domain.NodeID224(c.NodeId),
 		})
 	}
 
