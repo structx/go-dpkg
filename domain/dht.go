@@ -21,13 +21,15 @@ const (
 )
 
 // NodeID224 224 bit sha3 hash
-// 224 bits / 8 bits/byte = 28 bytes
-type NodeID224 [28]byte
-type NodeID256 [32]byte
-type NodeID384 [48]byte
-type NodeID512 [64]byte
+type NodeID224 [28]byte // 224 bits / 8 bits/byte = 28 bytes
+// NodeID256 256 bit sha3 hash
+type NodeID256 [32]byte // 256 bits / 8 bits/byte = 32 bytes
+// NodeID384 384 bit sha3 hash
+type NodeID384 [48]byte // 384 bits / 8 bits/byte = 48 bytes
+// NodeID512 512 bit sha3 hash
+type NodeID512 [64]byte // 512 bits / 8 bits/byte = 64 bytes
 
-// Distance between two nodes
+// Distance224 between two nodes
 type Distance224 NodeID224
 
 // XOR based Distance between two nodes
