@@ -139,7 +139,7 @@ func (n *Node) FindKClosestBuckets(ctx context.Context, key []byte) []domain.Nod
 			0xFF,
 		}
 
-		distance := domain.Distance(keyHash).XOR(levelBucket.ID)
+		distance := domain.Distance224(keyHash).XOR(levelBucket.ID)
 		if compareDistances(distance, bestDistance) < 0 {
 			closestBuckets = append(closestBuckets, levelBucket.ID)
 		}
@@ -181,7 +181,7 @@ func (n *Node) FindClosestNodes(ctx context.Context, key []byte, bucketID domain
 	}
 
 	for _, contact := range contactSlice {
-		distance := domain.Distance(keyHash).XOR(contact.ID)
+		distance := domain.Distance224(keyHash).XOR(contact.ID)
 		if compareDistances(distance, bestDistance) < 0 {
 			closestNodes = append(closestNodes, net.JoinHostPort(contact.IP, fmt.Sprintf("%d", contact.Port)))
 		}
@@ -211,8 +211,49 @@ func (n *Node) AddOrUpdateNode(ctx context.Context, c *domain.Contact) {
 	}
 }
 
-func compareDistances(a, b domain.NodeID224) int {
-	for i := range a {
+// Get value
+func (n *Node) Get(ctx context.Context, key []byte) *domain.Bucket {
+
+	keyHash := encode.HashKey(key)
+
+	result := n.routingTable.Search(ctx, keyHash)
+	if result == nil {
+		return nil
+	}
+
+	bucketSlice, ok := result.GetValue().([]*domain.Bucket)
+	if !ok {
+		return nil
+	}
+
+	for _, levelBucket := range bucketSlice {
+
+		var bestDistance = [28]byte{
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF,
+		}
+
+		for _, contact := range levelBucket.Contacts {
+			distance := domain.Distance224(levelBucket.ID).XOR(contact.ID)
+			if compareDistances(distance, bestDistance) < 0 {
+				return levelBucket
+			}
+		}
+	}
+
+	return nil
+}
+
+func compareDistances[T domain.NodeID224 | domain.NodeID256 | domain.NodeID384 | domain.NodeID512](a, b T) int {
+	for i := range len(a) {
 		if a[i] < b[i] {
 			return -1
 		} else if a[i] > b[i] {
