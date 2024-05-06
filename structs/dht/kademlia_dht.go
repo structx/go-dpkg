@@ -252,8 +252,8 @@ func (n *Node) Get(ctx context.Context, key []byte) *domain.Bucket {
 	return nil
 }
 
-func compareDistances[T domain.NodeID224 | domain.NodeID256 | domain.NodeID384 | domain.NodeID512](a, b T) int {
-	for i := range len(a) {
+func compareDistances(a, b domain.NodeID224) int {
+	for i := range a {
 		if a[i] < b[i] {
 			return -1
 		} else if a[i] > b[i] {
