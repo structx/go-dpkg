@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/go-hclog"
 	"github.com/hashicorp/raft"
 	boltdb "github.com/hashicorp/raft-boltdb"
-	"github.com/structx/go-pkg/domain"
+	"github.com/structx/go-dpkg/domain"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"

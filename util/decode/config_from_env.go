@@ -9,7 +9,7 @@ import (
 
 	hcl2 "github.com/hashicorp/hcl/v2/hclsimple"
 
-	"github.com/structx/go-pkg/domain"
+	"github.com/structx/go-dpkg/domain"
 )
 
 // ConfigFromEnv decode service configuration from config file

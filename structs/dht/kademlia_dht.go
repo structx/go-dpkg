@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net"
 
-	"github.com/structx/go-pkg/domain"
-	"github.com/structx/go-pkg/structs/tree"
-	"github.com/structx/go-pkg/util/encode"
+	"github.com/structx/go-dpkg/domain"
+	"github.com/structx/go-dpkg/structs/tree"
+	"github.com/structx/go-dpkg/util/encode"
 )
 
 // Node kademlia distributed hash table node

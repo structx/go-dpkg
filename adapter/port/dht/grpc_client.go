@@ -10,8 +10,8 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	"github.com/structx/go-pkg/domain"
-	pbv1 "github.com/structx/go-pkg/proto/dht/v1"
+	"github.com/structx/go-dpkg/domain"
+	pbv1 "github.com/structx/go-dpkg/proto/dht/v1"
 )
 
 // Client implementation

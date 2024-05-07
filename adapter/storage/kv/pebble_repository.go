@@ -10,7 +10,7 @@ import (
 
 	"go.uber.org/zap"
 
-	"github.com/structx/go-pkg/domain"
+	"github.com/structx/go-dpkg/domain"
 )
 
 // PebbleDB kv database implementation
