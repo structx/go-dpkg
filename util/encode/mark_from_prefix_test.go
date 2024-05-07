@@ -6,8 +6,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/structx/go-pkg/domain"
-	"github.com/structx/go-pkg/util/encode"
+	"github.com/structx/go-dpkg/domain"
+	"github.com/structx/go-dpkg/util/encode"
 )
 
 func Test_GenerateBucketID(t *testing.T) {

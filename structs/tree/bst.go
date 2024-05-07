@@ -8,7 +8,7 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"github.com/structx/go-pkg/domain"
+	"github.com/structx/go-dpkg/domain"
 	"golang.org/x/sync/errgroup"
 )
 

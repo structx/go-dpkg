@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/cockroachdb/pebble"
-	"github.com/structx/go-pkg/domain"
+	"github.com/structx/go-dpkg/domain"
 )
 
 // PebbleIterator kv iterator implementation

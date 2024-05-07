@@ -1,4 +1,4 @@
-module github.com/structx/go-pkg
+module github.com/structx/go-dpkg
 
 go 1.22.0
 

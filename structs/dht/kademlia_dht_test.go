@@ -7,8 +7,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/structx/go-pkg/domain"
-	"github.com/structx/go-pkg/structs/dht"
+	"github.com/structx/go-dpkg/domain"
+	"github.com/structx/go-dpkg/structs/dht"
 )
 
 func Test_FindKClosestBuckets(t *testing.T) {

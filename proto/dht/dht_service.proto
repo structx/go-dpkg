@@ -1,7 +1,7 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/structx/go-pkg/proto/dht/v1";
+option go_package = "github.com/structx/go-dpkg/proto/dht/v1";
 
 package dht.v1;
 

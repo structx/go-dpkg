@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/structx/go-pkg/util/encode"
+	"github.com/structx/go-dpkg/util/encode"
 )
 
 const (

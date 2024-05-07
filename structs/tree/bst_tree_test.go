@@ -6,8 +6,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/structx/go-pkg/structs/tree"
-	"github.com/structx/go-pkg/util/encode"
+	"github.com/structx/go-dpkg/structs/tree"
+	"github.com/structx/go-dpkg/util/encode"
 )
 
 func Test_Insert(t *testing.T) {
