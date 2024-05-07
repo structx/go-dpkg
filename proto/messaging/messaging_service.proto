@@ -1,7 +1,7 @@
 
 syntax = "proto3";
 
-option go_package = "github.com/structx/go-pkg/proto/messaging/v1";
+option go_package = "github.com/structx/go-dpkg/proto/messaging/v1";
 
 package messaging.v1;
 

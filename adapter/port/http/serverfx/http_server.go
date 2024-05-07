@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/structx/go-pkg/domain"
+	"github.com/structx/go-dpkg/domain"
 )
 
 // New http server provider constructor

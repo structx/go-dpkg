@@ -9,10 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/structx/go-pkg/adapter/logging"
-	"github.com/structx/go-pkg/adapter/port/http/controller"
-	"github.com/structx/go-pkg/adapter/setup"
-	"github.com/structx/go-pkg/util/decode"
+	"github.com/structx/go-dpkg/adapter/logging"
+	"github.com/structx/go-dpkg/adapter/port/http/controller"
+	"github.com/structx/go-dpkg/adapter/setup"
+	"github.com/structx/go-dpkg/util/decode"
 )
 
 func init() {
