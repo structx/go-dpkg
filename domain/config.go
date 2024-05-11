@@ -48,7 +48,7 @@ type DistributedHashTable struct {
 	AdvertiseAddr *string `hcl:"advertise_addr"`
 	Ports         struct {
 		GRPC int `hcl:"grpc"`
-	} `hcl:"ports"`
+	} `hcl:"ports, block"`
 }
 
 // Config service configuration interface

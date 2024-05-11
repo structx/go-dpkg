@@ -75,4 +75,6 @@ type DHT interface {
 	AddOrUpdateNode(ctx context.Context, c *Contact)
 	// Get value
 	Get(ctx context.Context, key []byte) *Bucket
+	// Put
+	Put(ctx context.Context, key, value []byte)
 }

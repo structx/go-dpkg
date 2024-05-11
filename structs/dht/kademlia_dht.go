@@ -252,6 +252,12 @@ func (n *Node) Get(ctx context.Context, key []byte) *domain.Bucket {
 	return nil
 }
 
+// Put todo
+func (n *Node) Put(ctx context.Context, key, value []byte) {
+	// TODO:
+	// implement function
+}
+
 func compareDistances(a, b domain.NodeID224) int {
 	for i := range a {
 		if a[i] < b[i] {
