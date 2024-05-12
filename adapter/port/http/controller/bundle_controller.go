@@ -25,14 +25,14 @@ func NewBundle(logger *zap.Logger) *Bundle {
 }
 
 // RegisterRoutesV0 create handler from exposed routes
-func (b *Bundle) RegisterRoutesV0() http.Handler {
+func (b *Bundle) RegisterRoutesV0(r chi.Router) {
 
-	r := chi.NewRouter()
+	rr := chi.NewRouter()
 
-	r.Get("/health", b.Health)
-	r.Handle("/metrics", promhttp.Handler())
+	rr.Get("/health", b.Health)
+	rr.Handle("/metrics", promhttp.Handler())
 
-	return r
+	r.Mount("/", rr)
 }
 
 // Health check handler
