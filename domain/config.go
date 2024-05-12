@@ -46,9 +46,9 @@ type AccessControl struct {
 type DistributedHashTable struct {
 	BindAddr      string  `hcl:"bind_addr"`
 	AdvertiseAddr *string `hcl:"advertise_addr"`
-	Ports         struct {
+	Ports         *struct {
 		GRPC int `hcl:"grpc"`
-	} `hcl:"ports"`
+	} `hcl:"ports,block"`
 }
 
 // Config service configuration interface

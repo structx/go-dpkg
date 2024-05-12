@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
 	"github.com/structx/go-dpkg/domain"
 	"github.com/structx/go-dpkg/structs/dht"
 )
@@ -37,7 +38,7 @@ func Test_FindClosestNodes(t *testing.T) {
 		}
 		c.SetID()
 
-		n.AddOrUpdateNode(ctx, c)
+		n.AddOrUpdateRoutingTable(ctx, c)
 
 		k := []byte("10.0.2.35")
 		bucketIDSlice := n.FindKClosestBuckets(ctx, k)

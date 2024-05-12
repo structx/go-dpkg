@@ -190,8 +190,8 @@ func (n *Node) FindClosestNodes(ctx context.Context, key []byte, bucketID domain
 	return closestNodes
 }
 
-// AddOrUpdateNode add or overwrite node
-func (n *Node) AddOrUpdateNode(ctx context.Context, c *domain.Contact) {
+// AddOrUpdateRoutingTable add or overwrite routing table
+func (n *Node) AddOrUpdateRoutingTable(ctx context.Context, c *domain.Contact) {
 
 	for i := 0; i < n.replicationFactor; i++ {
 		bucketID := encode.MaskFromPrefix(c.ID, i)
@@ -250,6 +250,40 @@ func (n *Node) Get(ctx context.Context, key []byte) *domain.Bucket {
 	}
 
 	return nil
+}
+
+// AddOrUpdateNode add or overwrite node records
+func (n *Node) AddOrUpdateNode(ctx context.Context, key []byte, value interface{}) {
+
+	keyHash := encode.HashKey(key)
+
+	result := n.routingTable.Search(ctx, keyHash)
+	bucketSlice, ok := result.GetValue().([]*domain.Bucket)
+	if !ok {
+		return
+	}
+
+	for _, levelBucket := range bucketSlice {
+
+		var bestDistance = [28]byte{
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF, 0xFF, 0xFF,
+			0xFF,
+		}
+
+		distance := domain.Distance224(levelBucket.ID).XOR(keyHash)
+		if compareDistances(distance, bestDistance) < 0 {
+			n.routingTable.Insert(ctx, keyHash, value)
+			return
+		}
+	}
 }
 
 func compareDistances(a, b domain.NodeID224) int {
