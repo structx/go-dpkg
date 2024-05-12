@@ -66,15 +66,17 @@ type RoutingTable struct {
 }
 
 // DHT k-buckets distributed hash table
+//
+//go:generate mockery --name DHT
 type DHT interface {
 	// FindKClosestBuckets iterate over all buckets and compare key to bucket id
 	FindKClosestBuckets(ctx context.Context, key []byte) []NodeID224
 	// FindClosestNodes iterate over buckets and find closest contact addresses
 	FindClosestNodes(ctx context.Context, key []byte, nodeID NodeID224) []string
 	// AddOrUpdateNode add or override node value
-	AddOrUpdateNode(ctx context.Context, c *Contact)
+	AddOrUpdateRoutingTable(ctx context.Context, c *Contact)
 	// Get value
 	Get(ctx context.Context, key []byte) *Bucket
 	// Put
-	Put(ctx context.Context, key, value []byte)
+	AddOrUpdateNode(ctx context.Context, key []byte, value interface{})
 }
