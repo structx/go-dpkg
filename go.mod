@@ -6,6 +6,7 @@ require (
 	github.com/Jille/raft-grpc-transport v1.5.0
 	github.com/cockroachdb/pebble v1.1.0
 	github.com/go-chi/chi/v5 v5.0.12
+	github.com/go-chi/render v1.0.3
 	github.com/golang/protobuf v1.5.2
 	github.com/hashicorp/go-hclog v1.6.2
 	github.com/hashicorp/hcl/v2 v2.20.1
@@ -23,6 +24,7 @@ require (
 require (
 	github.com/DataDog/zstd v1.5.2 // indirect
 	github.com/agext/levenshtein v1.2.1 // indirect
+	github.com/ajg/form v1.5.1 // indirect
 	github.com/apparentlymart/go-textseg/v13 v13.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/armon/go-metrics v0.4.1 // indirect
